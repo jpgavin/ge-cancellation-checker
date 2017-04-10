@@ -102,7 +102,7 @@ def main(settings):
             return
 
         script_output = check_output([cmd, '--ssl-protocol=any', '%s/ge-cancellation-checker.phantom.js' % pwd, '--config', settings.get('configfile')]).strip()
-        #logging.info(script_output)
+        logging.info(script_output)
 
         if script_output == 'None':
             logging.info('No appointments available.')
@@ -179,7 +179,7 @@ if __name__ == '__main__':
             for key, val in arguments.iteritems():
                 if not arguments.get(key): continue
                 settings[key] = val
-            
+
             settings['configfile'] = arguments['configfile']
             _check_settings(settings)
     except Exception as e:
