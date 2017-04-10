@@ -67,9 +67,9 @@ def notify_osx(msg):
 
 def notify_sms(settings, avail_apt):
     try:
-        from twilio.rest import TwilioRestClient
+        from twilio.rest import Client
     except ImportError:
-        logging.warning('Trying to send SMS, but TwilioRestClient not installed. Try \'pip install twilio\'')
+        logging.warning('Trying to send SMS, but Twilio Client not installed. Try \'pip install twilio\'')
         return
 
     try:
@@ -84,7 +84,7 @@ def notify_sms(settings, avail_apt):
 
     # Twilio logs annoyingly, silence that
     logging.getLogger('twilio').setLevel(logging.WARNING)
-    client = TwilioRestClient(account_sid, auth_token)
+    client = Client(account_sid, auth_token)
     body = 'New appointment available on %s' % avail_apt.strftime('%B %d, %Y')
     logging.info('Sending SMS.')
     client.messages.create(body=body, to=to_number, from_=from_number)
@@ -102,7 +102,8 @@ def main(settings):
             return
 
         script_output = check_output([cmd, '--ssl-protocol=any', '%s/ge-cancellation-checker.phantom.js' % pwd, '--config', settings.get('configfile')]).strip()
-        
+        #logging.info(script_output)
+
         if script_output == 'None':
             logging.info('No appointments available.')
             return
